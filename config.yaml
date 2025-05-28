@@ -1,0 +1,21 @@
+ENVIRONMENT: "DEV"
+
+JWT :
+  SECRET: "${JWT_SECRET}"
+  EXPIRE: 24
+
+DEV:
+  SERVER:
+    PORT: ":8000"
+  DATABASE:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    POSTGRES_DB : ocrolusdb
+
+production:
+  SERVER:
+    PORT: ":8000"
+  DATABASE:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    POSTGRES_DB : ocrolusdb
