@@ -7,8 +7,6 @@ This is a RESTful API backend service built with Go, Gin, and PostgreSQL. The ap
 - [Prerequisites](#prerequisites)
 - [Local Development Setup](#local-development-setup)
 - [Running with Docker](#running-with-docker)
-- [Environment Variables](#environment-variables)
-- [API Endpoints](#api-endpoints)
 - [Project Structure](#project-structure)
 
 ## Prerequisites
