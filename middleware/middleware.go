@@ -41,6 +41,26 @@ func Authenicator() gin.HandlerFunc {
 
 }
 
+func OptionalAuthenticator() gin.HandlerFunc {
+
+	return func(ctx *gin.Context) {
+
+		authorization := ctx.GetHeader("Authorization")
+		if len(authorization) > 0 {
+			fields := strings.Fields(authorization)
+			if len(fields) == 2 && strings.ToLower(fields[0]) == "bearer" {
+				encodedToken := fields[1]
+				userId, err := ValidateToken(encodedToken)
+				if err == nil {
+					ctx.Set("userId", userId)
+				}
+			}
+		}
+		ctx.Next()
+	}
+
+}
+
 func GetUserID(ctx *gin.Context) string {
 	return ctx.GetString("userId")
 }

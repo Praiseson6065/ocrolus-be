@@ -1,16 +1,11 @@
 package middleware
 
 import (
+	"Praiseson6065/ocrolus-be/config"
 	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/spf13/viper"
-)
-
-var (
-	jwtExpiration int
-	signingKey    []byte
 )
 
 type JWTClaims struct {
@@ -18,11 +13,10 @@ type JWTClaims struct {
 	jwt.StandardClaims
 }
 
-func init() {
-	jwtExpiration = viper.GetInt("JWT.EXPIRE")
-	signingKey = []byte(viper.GetString("JWT.PRIVATE_KEY"))
-}
 func GenerateToken(userId string) (string, error) {
+	// Get JWT settings from config
+	jwtExpiration := config.Config.JWT.Expire
+	signingKey := []byte(config.Config.JWT.Secret)
 
 	claims := JWTClaims{
 		userId,
@@ -38,17 +32,19 @@ func GenerateToken(userId string) (string, error) {
 	tokenString, err := token.SignedString(signingKey)
 
 	return tokenString, err
-
 }
 
 func ValidateToken(encodedToken string) (string, error) {
+	// Get signing key from config
+	signingKey := []byte(config.Config.JWT.Secret)
+
 	claims := &JWTClaims{}
 
 	_, err := jwt.ParseWithClaims(encodedToken, claims, func(t *jwt.Token) (interface{}, error) {
 		if _, isValid := t.Method.(*jwt.SigningMethodHMAC); !isValid {
 			return nil, fmt.Errorf("invalid token %s", t.Header["alg"])
 		}
-		return []byte(signingKey), nil
+		return signingKey, nil
 	})
 	if err != nil {
 		return "", err

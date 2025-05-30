@@ -1,16 +1,18 @@
 package main
 
 import (
+	"Praiseson6065/ocrolus-be/config"
 	"Praiseson6065/ocrolus-be/middleware"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 )
 
 func Server() error {
-	env := viper.GetString("ENVIRONMENT")
-	port := viper.GetString(env + ".server.port")
+	// Get port from config
+	port := config.Config.Server.Port
+
 	r := gin.New()
 	r.Use(middleware.CORS())
 	r.Use(gin.Logger())
@@ -22,6 +24,7 @@ func Server() error {
 	})
 	AuthRouter(r)
 	ApiRouter(r)
+	fmt.Println("Server is starting on 8000")
 	err := r.Run(port)
 	if err != nil {
 		return err
